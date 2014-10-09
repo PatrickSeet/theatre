@@ -1,0 +1,67 @@
+{% load staticfiles %}
+<html>
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<script src="{% static "js/jquery-1.11.0.js" %}"></script>
+<script src="{% static "js/jquery-2.1.1.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+
+    <body background="{% static 'img/squairy_light.png'%}">
+{#    <body background="{% static 'img/modern_cinema.jpg'%}">#}
+
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Patflix</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+            {% if not user.is_authenticated %}
+                <li class="active"><a href="{% url "social:begin" "facebook" %}">Facebook Login</a></li>
+            {% else %}
+                <li>{{ profile.name }}  <img src="{{ picture_url }}"/></li>
+                <li><a href="{% url "home" %}">Home</a></li>
+                <li><a href="{% url "movie" %}">Movies</a></li>
+
+                <li style="top: 10px;"><form action="" method="POST">{% csrf_token %}
+                      <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+                        data-amount="2000"
+                        data-name="PatFlix Payment"
+                        data-description="2 tickets ($20.00)"
+                        data-image="{% static 'img/rsz_patflix.png' %}">
+                      </script>
+                    </form></li>
+
+
+            {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+           <li><a href="{% url "logout" %}">Logout</a></li>
+          </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div style="margin-left: 100px; margin-top: 50px; margin-right: 100px">
+
+        {% block content %}{% endblock content %}
+        </div>
+    </body>
+</html>

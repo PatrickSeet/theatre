@@ -1,12 +1,63 @@
+{% load staticfiles %}
+<!DOCTYPE html>
 <html>
-    <body>
-        <nav>
-            {% if not user.is_authenticated %}
-                <a href="{% url "social:begin" "facebook" %}">Facebook Login</a>
-            {% else %}
-                Hi {{ user.username }}!
-            {% endif %}
-        </nav>
-        {% block content %}{% endblock content %}
-    </body>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.min.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Racing+Sans+One' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/diy2.css' %}">
+    <script src="{% static "js/jquery-1.11.0.js" %}"></script>
+    <script src="{% static "js/jquery-2.1.1.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <title>PatFlix</title>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">PatFlix</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% if not user.is_authenticated %}
+                        <li class="active"><a href="{% url "social:begin" "facebook" %}">Facebook Login</a></li>
+                    {% else %}
+                        <li>{{ profile.name }} <img src="{{ picture_url }}"/></li>
+                        <li><a href="{% url "home" %}">Home</a></li>
+                        <li><a href="{% url "movie" %}">Movies</a></li>
+
+                        <li style="top: 10px;">
+                            <form action="" method="POST">{% csrf_token %}
+                                <script
+                                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                        data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+                                        data-amount="2000"
+                                        data-name="PatFlix Payment"
+                                        data-description="2 tickets ($20.00)"
+                                        data-image="{% static 'img/rsz_patflix.png' %}">
+                                </script>
+                            </form>
+                        </li>
+                    {% endif %}
+                </ul>
+                  <ul class="nav navbar-nav navbar-right">
+           <li><a href="{% url "logout" %}">Logout</a></li>
+          </ul>
+            </div>
+        </div>
+    </nav>
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body>
+{% block content %}{% endblock content %}
+</body>
 </html>
